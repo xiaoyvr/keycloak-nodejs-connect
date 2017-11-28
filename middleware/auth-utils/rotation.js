@@ -39,6 +39,7 @@ Rotation.prototype.retrieveJWKs = function retrieveJWKs (callback) {
   options.method = 'GET';
   const promise = new Promise((resolve, reject) => {
     const req = getProtocol(options).request(options, (response) => {
+      console.log(response)
       if (response.statusCode < 200 || response.statusCode >= 300) {
         return reject('Error fetching JWK Keys');
       }
@@ -50,7 +51,11 @@ Rotation.prototype.retrieveJWKs = function retrieveJWKs (callback) {
         else resolve(data);
       });
     });
-    req.on('error', reject);
+    console.log(req)
+    req.on('error', (e) => {
+      console.error(e)
+      return reject(e)
+    } );
     req.end();
   });
   return nodeify(promise, callback);
